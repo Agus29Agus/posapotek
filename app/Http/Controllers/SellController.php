@@ -19,7 +19,6 @@ class SellController extends Controller
     public function data()
     {
         $sell = Sell::with('member')->orderBy('id_sell', 'desc')->get();
-
         return datatables()
             ->of($sell)
             ->addIndexColumn()
@@ -38,6 +37,9 @@ class SellController extends Controller
             ->addColumn('code_member', function ($sell) {
                 $member = $sell->member->code_member ?? '';
                 return '<span class="label label-success">'. $member .'</span>';
+            })
+            ->addColumn('tax', function ($sell) {
+                return $sell->tax . '%';
             })
             ->editColumn('discount', function ($sell) {
                 return $sell->discount . '%';
@@ -59,18 +61,22 @@ class SellController extends Controller
 
     public function create()
     {
-        $sell = new sell();
-        $sell->id_member = null;
-        $sell->total_item = 0;
-        $sell->total_price = 0;
-        $sell->discount = 0;
-        $sell->pay = 0;
-        $sell->receive = 0;
-        $sell->id_user = auth()->id();
-        $sell->save();
+        $sell = Sell::create([
+            'id_member'=> null,
+            'id_user'=>auth()->id()
+        ]);
+        // $sell = new sell();
+        // $sell->id_member = null;
+        // $sell->total_item = 0;
+        // $sell->total_price = 0;
+        // $sell->discount = 0;
+        // $sell->pay = 0;
+        // $sell->receive = 0;
+        // $sell->id_user = auth()->id();
+        // $sell->save();
 
         session(['id_sell' => $sell->id_sell]);
-        return redirect()->route('transaction.index');
+        return to_route('transaction.index');
     }
 
     public function store(Request $request)
@@ -80,6 +86,7 @@ class SellController extends Controller
         $sell->total_item = $request->total_item;
         $sell->total_price = $request->total;
         $sell->discount = $request->discount;
+        $sell->tax = $request->tax;
         $sell->pay = $request->pay;
         $sell->receive = $request->receive;
         $sell->update();

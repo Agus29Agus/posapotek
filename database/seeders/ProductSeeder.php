@@ -1,0 +1,31 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Product;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+
+class ProductSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        $count = 1;
+        $data = [];
+        for ($i = 0; $i < $count; $i++) {
+            $data[] = [
+                'code_product' => 'p-'.$i+1,
+                'id_category'=>rand(1,3),
+                'name_product' => 'Trombopop',
+                'brand'=>'Trombopop',
+                'buy_price'=>'1000',
+                'sell_price'=>'10000',
+                'stock'=>100
+            ];
+        }
+        Product::insert($data);
+    }
+}

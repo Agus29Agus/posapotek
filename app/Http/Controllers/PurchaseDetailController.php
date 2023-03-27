@@ -15,14 +15,15 @@ class PurchaseDetailController extends Controller
     {
         $id_purchase = session('id_purchase');
         $product = Product::orderBy('name_product')->get();
-        $supplier = Supplier::find(session('id_supplier'));
+        $supplier = Supplier::findOrFail(session('id_supplier'));
         $discount = Purchase::find($id_purchase)->discount ?? 0;
 
-        if (! $supplier) {
-            abort(404);
-        }
+        // if (! $supplier) {
+        //     abort(404);
+        // }
 
         return view('purchase_detail.index', compact('id_purchase', 'product', 'supplier', 'discount'));
+        
     }
 
     public function data($id)
@@ -101,9 +102,9 @@ class PurchaseDetailController extends Controller
         return response(null, 204);
     }
 
-    public function loadForm($discount, $total)
+    public function loadForm($discount, $total,$cost)
     {
-        $pay = $total - ($discount / 100 * $total);
+        $pay = $total - ($discount / 100 * $total) + (int)$cost;
         $data  = [
             'totalrp' => money_format($total),
             'pay' => $pay,

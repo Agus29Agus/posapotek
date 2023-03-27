@@ -11,16 +11,13 @@
         text-align: center;
         height: 100px;
     }
-
     .show-counted {
         padding: 10px;
         background: #f0f0f0;
     }
-
     .table-purchase tbody tr:last-child {
         display: none;
     }
-
     @media(max-width: 768px) {
         .show-pay {
             font-size: 3em;
@@ -113,6 +110,12 @@
                                 </div>
                             </div>
                             <div class="form-group row">
+                                <label for="cost" class="col-lg-2 control-label">Cost</label>
+                                <div class="col-lg-8">
+                                    <input type="text" value="0" id="cost" name="cost" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <label for="pay" class="col-lg-2 control-label">Pay</label>
                                 <div class="col-lg-8">
                                     <input type="text" id="payrp" class="form-control">
@@ -136,10 +139,8 @@
 @push('scripts')
 <script>
     let table, table2;
-
     $(function () {
         $('body').addClass('sidebar-collapse');
-
         table = $('.table-purchase').DataTable({
             responsive: true,
             processing: true,
@@ -162,14 +163,12 @@
             paginate: false
         })
         .on('draw.dt', function () {
-            loadForm($('#discount').val());
+            loadForm($('#discount').val(),$("#cost").val());
         });
         table2 = $('.table-product').DataTable();
-
         $(document).on('input', '.quantity', function () {
             let id = $(this).data('id');
             let total = parseInt($(this).val());
-
             if (total < 1) {
                 $(this).val(1);
                 alert('Total could not less than 1');
@@ -180,7 +179,6 @@
                 alert('Total could not more than 10000');
                 return;
             }
-
             $.post(`{{ url('/purchase_detail') }}/${id}`, {
                     '_token': $('[name=csrf-token]').attr('content'),
                     '_method': 'put',
@@ -188,7 +186,7 @@
                 })
                 .done(response => {
                     $(this).on('mouseout', function () {
-                        table.ajax.reload(() => loadForm($('#discount').val()));
+                        table.ajax.reload(() => loadForm($('#discount').val(),$("#cost").val()));
                     });
                 })
                 .fail(errors => {
@@ -196,47 +194,45 @@
                     return;
                 });
         });
-
         $(document).on('input', '#discount', function () {
             if ($(this).val() == "") {
                 $(this).val(0).select();
             }
-
-            loadForm($(this).val());
+            loadForm($(this).val(),$("#discount").val());
         });
-
+        $(document).on('input', '#cost', function () {
+            if ($(this).val() == "") {
+                $(this).val(0).select();
+            }
+            loadForm($("#discount").val(),$(this).val());
+        });
         $('.btn-save').on('click', function () {
             $('.form-purchase').submit();
         });
     });
-
     function showProduct() {
         $('#modal-product').modal('show');
     }
-
     function hideProduct() {
         $('#modal-product').modal('hide');
     }
-
     function chooseProduct(id, code) {
         $('#id_product').val(id);
         $('#code_product').val(code);
         hideProduct();
         addProduct();
     }
-
     function addProduct() {
         $.post('{{ route('purchase_detail.store') }}', $('.form-product').serialize())
             .done(response => {
                 $('#code_product').focus();
-                table.ajax.reload(() => loadForm($('#discount').val()));
+                table.ajax.reload(() => loadForm($('#discount').val(),$("#cost").val()));
             })
             .fail(errors => {
                 alert('Could not save data');
                 return;
             });
     }
-
     function deleteData(url) {
         if (confirm('Are you sure want to delete selected data?')) {
             $.post(url, {
@@ -244,7 +240,7 @@
                     '_method': 'delete'
                 })
                 .done((response) => {
-                    table.ajax.reload(() => loadForm($('#discount').val()));
+                    table.ajax.reload(() => loadForm($('#discount').val(),$("#cost").val()));
                 })
                 .fail((errors) => {
                     alert('Could not delete data');
@@ -252,12 +248,12 @@
                 });
         }
     }
-
-    function loadForm(discount = 0) {
+    function loadForm(discount = 0, cost =0) {
         $('#total').val($('.total').text());
         $('#total_item').val($('.total_item').text());
-
-        $.get(`{{ url('/purchase_detail/loadform') }}/${discount}/${$('.total').text()}`)
+        let url = `{{ url('/purchase_detail/loadform') }}/${discount}/${$('.total').text()}/${cost}`;
+        console.log(url);
+        $.get(url)
             .done(response => {
                 $('#totalrp').val('Rp. '+ response.totalrp);
                 $('#payrp').val('Rp. '+ response.payrp);
@@ -266,6 +262,7 @@
                 $('.show-counted').text(response.counted);
             })
             .fail(errors => {
+                console.log(errors);
                 alert('Could not show data');
                 return;
             })

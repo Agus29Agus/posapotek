@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('purchase', function (Blueprint $table) {
             $table->increments('id_purchase');
             $table->integer('id_supplier');
-            $table->integer('total_item');
-            $table->integer('total_price');
+            $table->integer('total_item')->default(0);;
+            $table->integer('total_price')->default(0);;
             $table->tinyInteger('discount')->default(0);
+            $table->double("cost")->default(0);
             $table->integer('pay')->default(0);
             $table->timestamps();
         });

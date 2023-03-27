@@ -11,16 +11,13 @@
         text-align: center;
         height: 100px;
     }
-
     .show-counted {
         padding: 10px;
         background: #f0f0f0;
     }
-
     .table-sell tbody tr:last-child {
         display: none;
     }
-
     @media(max-width: 768px) {
         .show-pay {
             font-size: 3em;
@@ -112,6 +109,13 @@
                                 </div>
                             </div>
                             <div class="form-group row">
+                                <label for="tax" class="col-lg-2 control-label">Tax</label>
+                                <div class="col-lg-8">
+                                    <input type="number" name="tax" id="tax" class="form-control" 
+                                        value="0">
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <label for="pay" class="col-lg-2 control-label">Pay</label>
                                 <div class="col-lg-8">
                                     <input type="text" id="payrp" class="form-control" readonly>
@@ -148,10 +152,8 @@
 @push('scripts')
 <script>
     let table, table2;
-
     $(function () {
         $('body').addClass('sidebar-collapse');
-
         table = $('.table-sell').DataTable({
             responsive: true,
             processing: true,
@@ -181,11 +183,9 @@
             }, 300);
         });
         table2 = $('.table-product').DataTable();
-
         $(document).on('input', '.quantity', function () {
             let id = $(this).data('id');
             let total = parseInt($(this).val());
-
             if (total < 1) {
                 $(this).val(1);
                 alert('Total could not less than 1');
@@ -196,7 +196,6 @@
                 alert('Total could not more than 10000');
                 return;
             }
-
             $.post(`{{ url('/transaction') }}/${id}`, {
                     '_token': $('[name=csrf-token]').attr('content'),
                     '_method': 'put',
@@ -204,7 +203,7 @@
                 })
                 .done(response => {
                     $(this).on('mouseout', function () {
-                        table.ajax.reload(() => loadForm($('#discount').val()));
+                        table.ajax.reload(() => loadForm($('#discount').val(),0,$("#tax").val()));
                     });
                 })
                 .fail(errors => {
@@ -212,45 +211,42 @@
                     return;
                 });
         });
-
         $(document).on('input', '#discount', function () {
             if ($(this).val() == "") {
                 $(this).val(0).select();
             }
-
-            loadForm($(this).val());
+            loadForm($(this).val(),0,$("#tax").val());
         });
-
+        $(document).on('input', '#tax', function () {
+            if ($(this).val() == "") {
+                $(this).val(0).select();
+            }
+            loadForm($(this).val(),0,$("#tax").val());
+        });
         $('#receive').on('input', function () {
             if ($(this).val() == "") {
                 $(this).val(0).select();
             }
-
             loadForm($('#discount').val(), $(this).val());
         }).focus(function () {
             $(this).select();
         });
-
         $('.btn-save').on('click', function () {
             $('.form-sell').submit();
         });
     });
-
     function showProduct() {
         $('#modal-product').modal('show');
     }
-
     function hideProduct() {
         $('#modal-product').modal('hide');
     }
-
     function chooseProduct(id, kode) {
         $('#id_product').val(id);
         $('#code_product').val(kode);
         hideProduct();
         addProduct();
     }
-
     function addProduct() {
         $.post('{{ route('transaction.store') }}', $('.form-product').serialize())
             .done(response => {
@@ -262,11 +258,9 @@
                 return;
             });
     }
-
     function showMember() {
         $('#modal-member').modal('show');
     }
-
     function chooseMember(id, kode) {
         $('#id_member').val(id);
         $('#code_member').val(kode);
@@ -275,11 +269,9 @@
         $('#receive').val(0).focus().select();
         hideMember();
     }
-
     function hideMember() {
         $('#modal-member').modal('hide');
     }
-
     function deleteData(url) {
         if (confirm('Are you sure want to delete selected data?')) {
             $.post(url, {
@@ -295,19 +287,17 @@
                 });
         }
     }
-
-    function loadForm(discount = 0, receive = 0) {
+    function loadForm(discount = 0, receive = 0,tax = 0) {
         $('#total').val($('.total').text());
         $('#total_item').val($('.total_item').text());
-
-        $.get(`{{ url('/transaction/loadform') }}/${discount}/${$('.total').text()}/${receive}`)
+        tax = $("#tax").val();
+        $.get(`{{ url('/transaction/loadform') }}/${discount}/${$('.total').text()}/${receive}/${tax}`)
             .done(response => {
                 $('#totalrp').val('Rp. '+ response.totalrp);
                 $('#payrp').val('Rp. '+ response.payrp);
                 $('#pay').val(response.pay);
                 $('.show-pay').text('Pay: Rp. '+ response.payrp);
                 $('.show-counted').text(response.counted);
-
                 $('#change').val('Rp.'+ response.changerp);
                 if ($('#receive').val() != 0) {
                     $('.show-pay').text('Change: Rp. '+ response.changerp);

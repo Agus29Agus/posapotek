@@ -14,17 +14,18 @@
     <div class="col-lg-12">
         <div class="box">
             <div class="box-body table-responsive">
-                <table class="table table-stiped table-bordered table-sell">
+                <table id="table-sell" class="table table-stiped table-bordered table-sell">
                     <thead>
-                        <th width="5%">No.</th>
-                        <th>Date</th>
-                        <th>Member Code</th>
-                        <th>Total Item</th>
-                        <th>Total Price</th>
-                        <th>Discount</th>
-                        <th>Total Payments</th>
-                        <th>Cashier</th>
-                        <th width="15%"><i class="fa fa-cog"></i></th>
+                        <th scope="col"  width="5%">No.</th>
+                        <th scope="col" >Date</th>
+                        <th scope="col" >Member Code</th>
+                        <th scope="col" >Total Item</th>
+                        <th scope="col" >Total Price</th>
+                        <th scope="col" >Discount</th>
+                        {{-- <th scope="col" >Taxes</th> --}}
+                        <th scope="col" >Total Payments</th>
+                        <th scope="col" >Cashier</th>
+                        <th scope="col"  width="15%"><i class="fa fa-cog"></i></th>
                     </thead>
                 </table>
             </div>
@@ -38,9 +39,8 @@
 @push('scripts')
 <script>
     let table, table1;
-
     $(function () {
-        table = $('.table-sell').DataTable({
+        table = $('#table-sell').DataTable({
             responsive: true,
             processing: true,
             serverSide: true,
@@ -55,12 +55,12 @@
                 {data: 'total_item'},
                 {data: 'total_price'},
                 {data: 'discount'},
+                // {data: 'tax'},
                 {data: 'pay'},
                 {data: 'cashier'},
                 {data: 'action', searchable: false, sortable: false},
             ]
         });
-
         table1 = $('.table-detail').DataTable({
             processing: true,
             bSort: false,
@@ -75,14 +75,11 @@
             ]
         })
     });
-
     function showDetail(url) {
         $('#modal-detail').modal('show');
-
         table1.ajax.url(url);
         table1.ajax.reload();
     }
-
     function deleteData(url) {
         if (confirm('Are you sure want to delete selected data?')) {
             $.post(url, {

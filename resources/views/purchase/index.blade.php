@@ -28,6 +28,7 @@
                         <th>Total Item</th>
                         <th>Total Price</th>
                         <th>Discount</th>
+                        <th>Cost</th>
                         <th>Total Pay</th>
                         <th width="15%"><i class="fa fa-cog"></i></th>
                     </thead>
@@ -44,7 +45,6 @@
 @push('scripts')
 <script>
     let table, table1;
-
     $(function () {
         table = $('.table-purchase').DataTable({
             responsive: true,
@@ -61,11 +61,11 @@
                 {data: 'total_item'},
                 {data: 'total_price'},
                 {data: 'discount'},
+                {data: 'cost'},
                 {data: 'pay'},
                 {data: 'action', searchable: false, sortable: false},
             ]
         });
-
         $('.table-supplier').DataTable();
         table1 = $('.table-detail').DataTable({
             processing: true,
@@ -81,18 +81,14 @@
             ]
         })
     });
-
     function addForm() {
         $('#modal-supplier').modal('show');
     }
-
     function showDetail(url) {
         $('#modal-detail').modal('show');
-
         table1.ajax.url(url);
         table1.ajax.reload();
     }
-
     function deleteData(url) {
         if (confirm('Are you sure want to delete selected data?')) {
             $.post(url, {

@@ -8,6 +8,8 @@ use App\Models\PurchaseDetail;
 use App\Models\Product;
 use App\Models\Supplier;
 
+use function PHPSTORM_META\map;
+
 class PurchaseController extends Controller
 {
     public function index()
@@ -33,6 +35,9 @@ class PurchaseController extends Controller
             ->addColumn('pay', function ($purchase) {
                 return 'Rp. '. money_format($purchase->pay);
             })
+            ->addColumn('cost', function ($purchase) {
+                return 'Rp. '. money_format($purchase->cost);
+            })
             ->addColumn('date', function ($purchase) {
                 return indonesian_date($purchase->created_at, false);
             })
@@ -56,18 +61,25 @@ class PurchaseController extends Controller
 
     public function create($id)
     {
-        $purchase = new purchase();
-        $purchase->id_supplier = $id;
-        $purchase->total_item  = 0;
-        $purchase->total_price = 0;
-        $purchase->discount      = 0;
-        $purchase->pay       = 0;
-        $purchase->save();
+        $purchase = Purchase::create([
+            'id_supplier'=>$id,
+            // 'total_item'=>0,
+            // 'total_price'=>0,
+            // 'discount'=>0,
+            // 'pay'=>0
+        ]);
+        // $purchase = new purchase();
+        // $purchase->id_supplier = $id;
+        // $purchase->total_item  = 0;
+        // $purchase->total_price = 0;
+        // $purchase->discount      = 0;
+        // $purchase->pay       = 0;
+        // $purchase->save();
 
         session(['id_purchase' => $purchase->id_purchase]);
         session(['id_supplier' => $purchase->id_supplier]);
 
-        return redirect()->route('purchase_detail.index');
+        return to_route('purchase_detail.index');
     }
 
     public function store(Request $request)
@@ -77,6 +89,7 @@ class PurchaseController extends Controller
         $purchase->total_price = $request->total;
         $purchase->discount = $request->discount;
         $purchase->pay = $request->pay;
+        $purchase->cost = $request->cost;
         $purchase->update();
 
         $detail = purchaseDetail::where('id_purchase', $purchase->id_purchase)->get();
@@ -86,7 +99,7 @@ class PurchaseController extends Controller
             $product->update();
         }
 
-        return redirect()->route('purchase.index');
+        return to_route('purchase.index');
     }
 
     public function show($id)
