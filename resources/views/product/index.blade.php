@@ -17,7 +17,7 @@
                 <div class="btn-group">
                     <button onclick="addForm('{{ route('product.store') }}')" class="btn btn-success btn-xs btn-flat"><i class="fa fa-plus-circle"></i> Add</button>
                     <button onclick="deleteSelected('{{ route('product.delete_selected') }}')" class="btn btn-danger btn-xs btn-flat"><i class="fa fa-trash"></i> Delete</button>
-                    <button onclick="printBarcode('{{ route('product.print_barcode') }}')" class="btn btn-info btn-xs btn-flat"><i class="fa fa-barcode"></i> Print Barcode</button>
+                    {{-- <button onclick="printBarcode('{{ route('product.print_barcode') }}')" class="btn btn-info btn-xs btn-flat"><i class="fa fa-barcode"></i> Print Barcode</button> --}}
                 </div>
             </div>
             <div class="box-body table-responsive">
