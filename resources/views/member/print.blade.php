@@ -7,55 +7,80 @@
     <title>Print Member Card</title>
 
     <style>
-        .box {
-            position: flex;
-        }
-        .card {
-            width:140mm;
-        }
-        .logo {
-            position: flex;
-            top: 3pt;
-            right: 0pt;
-            font-size: 16pt;
-            font-family: Arial, Helvetica, sans-serif;
-            font-weight: bold;
-            color: #090000 !important;
-        }
-        .logo p {
-            text-align: right;
-            margin-right: 16pt;
-        }
-        .logo img {
-            position: flex;
-            margin-top: -5pt;
-            width: 40px;
-            height: 40px;
-            right: 16pt;
-        }
-        .name {
-            position: flex;
-            top: 100pt;
-            right: 16pt;
-            font-size: 12pt;
-            font-family: Arial, Helvetica, sans-serif;
-            font-weight: bold;
-            color: #090000 !important;
-        }
-        .phone {
-            position: flex;
-            margin-top: 120pt;
-            right: 16pt;
-            color: #090000;
-        }
-        .barcode {
-            position: flex;
-            top: 50pt;
-            left: .860rem;
-            border: 1px solid #090000;
-            padding: .5px;
-            background: #fff;
-        }
+.box {
+  position: relative;
+  width: 300px;
+  height: 200px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  padding: 20px;
+  margin: 20px auto;
+}
+
+.box::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('{{ public_path($setting->path_card_member) }}');
+  background-size: cover;
+  filter: blur(500px);
+  z-index: -1;
+}
+
+.box img {
+  width: 50%;
+  display: block;
+  margin: 0 auto;
+}
+
+.logo {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.logo p {
+  font-size: 16px;
+  margin: 0;
+  font-weight: bold;
+}
+
+.logo img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-top: 10px;
+}
+
+.name {
+  font-size: 24px;
+  margin-top: 160px;
+}
+
+.phone {
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.barcode {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  text-align: left;
+}
+
+.barcode img {
+  width: 40px;
+  height: 40px;
+  margin-top: 10px;
+}
         .text-left {
             text-align: left;
         }
@@ -68,14 +93,13 @@
     </style>
 </head>
 <body>
-    <section style="border: 1px solid #fff">
+    <section style="border: 1% solid #fff">
         <table width="100%">
             @foreach ($datamember as $key => $data)
                 <tr>
                     @foreach ($data as $item)
                         <td class="text-center">
                             <div class="box">
-                                <img src="{{ public_path($setting->path_card_member) }}" alt="card" width="50%">
                                 <div class="logo">
                                     <p>{{ $setting->name_company }}</p>
                                     {{-- <p>{{ config('app.name') }}</p> --}}
@@ -84,7 +108,7 @@
                                 <div class="name">{{ $item->name }}</div>
                                 <div class="phone">{{ $item->phone }}</div>
                                 <div class="barcode text-left">
-                                    <img src="data:image/png;base64, {{ DNS2D::getBarcodePNG("$item->code_member", 'QRCODE') }}" alt="qrcode"
+                                    <img src="data:image/png;base64, {{ DNS2D::getBarcodePNG("$item->name", 'QRCODE') }}" alt="qrcode"
                                         height="40"
                                         widht="40">
                                 </div>

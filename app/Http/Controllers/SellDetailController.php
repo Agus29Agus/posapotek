@@ -114,12 +114,8 @@ class SellDetailController extends Controller
 
     public function loadForm($discount = 0, $total = 0, $received = 0,$tax =0)
     {
-        // $pay = $total - ($discount / 100 * $total);
         $discountTotal = $total  - ($total * $discount/100) ;
         $pay = $discountTotal + ($discountTotal * $tax/100 );
-        // $pay = $taxTotal + ($discount/100 * $taxTotal);
-        // $tax = 11;
-        // $pay = $total - $discount/100 + $tax/100;
 
         $change = ($received != 0) ? $received - $pay : 0;
         $data    = [

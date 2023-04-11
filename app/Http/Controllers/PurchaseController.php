@@ -51,13 +51,14 @@ class PurchaseController extends Controller
                 return '
                 <div class="btn-group">
                     <button onclick="showDetail(`'. route('purchase.show', $purchase->id_purchase) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-eye"></i></button>
-                    <button onclick="deleteData(`'. route('purchase.destroy', $purchase->id_purchase) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
                 </div>
                 ';
             })
             ->rawColumns(['action'])
             ->make(true);
     }
+    // dibawah ini ada script delete purchase 
+    // <button onclick="deleteData(`'. route('purchase.destroy', $purchase->id_purchase) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
 
     public function create($id)
     {
@@ -92,7 +93,7 @@ class PurchaseController extends Controller
         $purchase->cost = $request->cost;
         $purchase->update();
 
-        $detail = purchaseDetail::where('id_purchase', $purchase->id_purchase)->get();
+        $detail = PurchaseDetail::where('id_purchase', $purchase->id_purchase)->get();
         foreach ($detail as $item) {
             $product = Product::find($item->id_product);
             $product->stock += $item->total;
@@ -104,7 +105,7 @@ class PurchaseController extends Controller
 
     public function show($id)
     {
-        $detail = purchaseDetail::with('product')->where('id_purchase', $id)->get();
+        $detail = PurchaseDetail::with('product')->where('id_purchase', $id)->get();
 
         return datatables()
             ->of($detail)
@@ -117,6 +118,9 @@ class PurchaseController extends Controller
             })
             ->addColumn('buy_price', function ($detail) {
                 return 'Rp. '. money_format($detail->buy_price);
+            })
+            ->addColumn('cost', function ($detail) {
+                return 'Rp. '. money_format($detail->cost);
             })
             ->addColumn('total', function ($detail) {
                 return money_format($detail->total);
@@ -131,7 +135,7 @@ class PurchaseController extends Controller
     public function destroy($id)
     {
         $purchase = Purchase::find($id);
-        $detail    = purchaseDetail::where('id_purchase', $purchase->id_purchase)->get();
+        $detail    = PurchaseDetail::where('id_purchase', $purchase->id_purchase)->get();
         foreach ($detail as $item) {
             $product = Product::find($item->id_product);
             if ($product) {

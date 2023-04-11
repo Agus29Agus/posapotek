@@ -96,7 +96,7 @@ class MemberController extends Controller
             $datamember[] = $member;
         }
 
-        $datamember = $datamember->chunk(2);
+        $datamember = $datamember->chunk(1);
         $setting    = Setting::first();
 
         $no  = 1;

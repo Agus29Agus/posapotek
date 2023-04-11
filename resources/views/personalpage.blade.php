@@ -55,6 +55,8 @@
                 </li>
                 <li><a href="#contact" class="nav-link scrollto"><i class="bx bx-envelope"></i> <span>Contact</span></a>
                 </li>
+                <li><a href="{{ route('dashboard') }}" class="nav-link scrollto"><i class="bx bx-left-arrow-alt"></i> <span>Dashboard</span></a>
+                </li>
             </ul>
         </nav><!-- .nav-menu -->
 

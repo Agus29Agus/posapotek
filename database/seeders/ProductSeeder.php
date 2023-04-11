@@ -17,8 +17,8 @@ class ProductSeeder extends Seeder
         $data = [];
         for ($i = 0; $i < $count; $i++) {
             $data[] = [
-                'code_product' => 'p-'.$i+1,
-                'id_category'=>rand(1,3),
+                'code_product' => '000000'.$i+1,
+                'id_category'=>(1),
                 'name_product' => 'Trombopop',
                 'brand'=>'Trombopop',
                 'buy_price'=>'1000',
