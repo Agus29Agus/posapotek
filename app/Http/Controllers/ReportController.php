@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Purchase;
 use App\Models\Spending;
 use App\Models\Sell;
+use App\Exports\ReportExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use PDF;
 
@@ -82,4 +84,15 @@ class ReportController extends Controller
         return $pdf->stream('report-income-'. date('Y-m-d-his') .'.pdf');
     }
 
+    // public function exportExcel($request, $begin, $end, $id)
+    // {
+    //     return Excel::download(new ReportExport, 'report.xlsx');
+    // }
+
+    // public function export(Request $request, $type, $filename)
+    // {
+    //     $data = Report::all();
+
+    //     return Excel::download(new ReportExport($data), $filename.'.'.$type);
+    // }
 }

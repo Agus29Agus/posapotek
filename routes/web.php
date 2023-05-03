@@ -76,6 +76,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/sell', [SellController::class, 'index'])->name('sell.index');
         Route::get('/sell/{id}', [SellController::class, 'show'])->name('sell.show');
         Route::delete('/sell/{id}', [SellController::class, 'destroy'])->name('sell.destroy');
+
     });
 
     Route::group(['middleware' => 'level:1,2'], function () {

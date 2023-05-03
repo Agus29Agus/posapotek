@@ -37,6 +37,9 @@
     </div>
 </div>
 
+{{-- <a href="{{ route('report.export_excel', [$dateBegin, $dateEnd]) }}" target="_blank" class="btn btn-success btn-xs btn-flat"><i class="fa fa-file-excel-o"></i> Export Excel</a> --}}
+
+
 @includeIf('report.form')
 @endsection
 
