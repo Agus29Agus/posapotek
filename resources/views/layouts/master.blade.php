@@ -34,8 +34,8 @@
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 
     @stack('css')
-</head>
-<body class="hold-transition skin-purple-light sidebar-mini">
+</head> 
+<body class="hold-transition skin-blue sidebar-mini ">
     <div class="wrapper">
 
         @includeIf('layouts.header')
