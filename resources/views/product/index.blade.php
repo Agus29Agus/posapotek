@@ -37,6 +37,8 @@
                             <th>Sell Price</th>
                             <th>Discount</th>
                             <th>Stock</th>
+                            <th>Batch</th>
+                            <th>Expired Date</th>
                             <th width="15%"><i class="fa fa-cog"></i></th>
                         </thead>
                     </table>
@@ -73,6 +75,8 @@
                 {data: 'sell_price'},
                 {data: 'discount'},
                 {data: 'stock'},
+                {data: 'batch'},
+                {data: 'expired_date'},
                 {data: 'action', searchable: false, sortable: false},
             ]
         });
@@ -124,6 +128,8 @@
                 $('#modal-form [name=sell_price]').val(response.sell_price);
                 $('#modal-form [name=discount]').val(response.discount);
                 $('#modal-form [name=stock]').val(response.stock);
+                $('#modal-form [name=batch]').val(response.batch);
+                $('#modal-form [name=expired_date]').val(response.expired_date);
             })
             .fail((errors) => {
                 alert('Could not show data');

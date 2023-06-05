@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    Purchase Transaction
+    Active Purchase Transaction
 @endsection
 
 @push('css')

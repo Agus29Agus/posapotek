@@ -65,6 +65,20 @@
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label for="batch" class="col-lg-2 col-lg-offset-1 control-label">Batch</label>
+                        <div class="col-lg-6">
+                            <input type="number" name="batch" id="batch" class="form-control" required value="0">
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="expired_date" class="col-lg-2 col-lg-offset-1 control-label">Expired Date</label>
+                        <div class="col-lg-6">
+                            <input type="date" name="expired_date" id="expired_date" class="form-control" required value="0">
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-sm btn-flat btn-primary"><i class="fa fa-save"></i> Save</button>

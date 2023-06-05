@@ -21,6 +21,8 @@ return new class extends Migration
             $table->tinyInteger('discount')->default(0);
             $table->integer('sell_price');
             $table->integer('stock');
+            $table->string('batch');
+            $table->date('expired_date');
             $table->timestamps();
             $table->softDeletes();
         });

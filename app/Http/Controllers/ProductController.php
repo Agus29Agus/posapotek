@@ -48,6 +48,12 @@ class ProductController extends Controller
             ->addColumn('stock', function ($product) {
                 return money_format($product->stock);
             })
+            ->addColumn('batch', function ($product) {
+                return money_format($product->batch);
+            })
+            ->addColumn('expired_date', function ($product) {
+                return indonesian_date($product->expired_date);
+            })
             ->addColumn('action', function ($product) {
                 return '
                 <div class="btn-group">

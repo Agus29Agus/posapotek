@@ -80,6 +80,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     Route::group(['middleware' => 'level:1,2'], function () {
+        
         Route::group(['as'=>'transaction.','prefix'=>'/transaction'],function(){
             Route::group(['controller'=>SellController::class],function(){
                 Route::get('new', 'create')->name('new');
