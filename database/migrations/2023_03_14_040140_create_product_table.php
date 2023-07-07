@@ -15,7 +15,7 @@ return new class extends Migration
             $table->increments('id_product');
             $table->unsignedInteger('id_category');
             $table->string('code_product')->unique();
-            $table->string('name_product')->unique();
+            $table->string('name_product');
             $table->string('brand')->nullable();
             $table->integer('buy_price');
             $table->tinyInteger('discount')->default(0);
