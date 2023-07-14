@@ -22,4 +22,10 @@ class Sell extends Model
     {
         return $this->hasOne(User::class, 'id', 'id_user');
     }
+    public function detail(){
+        return $this->hasMany(SellDetail::class,'id_sell','id_sell');
+    }
+    // public function products(){
+    //     return $this->hasManyThrough(Product::class,SellDetail::class,'id_product','id_product','id','id_product');
+    // }
 }

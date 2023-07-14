@@ -18,12 +18,16 @@ class SellController extends Controller
 
     public function data()
     {
-        $sell = Sell::with('member')->orderBy('id_sell', 'desc')->get();
+        $sell = Sell::with('member','detail.products')->orderBy('id_sell', 'desc')->get();
+        
         return datatables()
             ->of($sell)
             ->addIndexColumn()
             ->addColumn('total_item', function ($sell) {
                 return money_format($sell->total_item);
+            })
+            ->addColumn('products', function ($sell) {
+               return $sell->detail;
             })
             ->addColumn('total_price', function ($sell) {
                 return 'Rp. '. money_format($sell->total_price);
@@ -76,7 +80,7 @@ class SellController extends Controller
         // $sell->save();
 
         session(['id_sell' => $sell->id_sell]);
-        return to_route('transaction.index');
+        return redirect()->route('transaction.index');
     }
 
     public function store(Request $request)

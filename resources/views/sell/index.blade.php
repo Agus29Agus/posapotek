@@ -19,6 +19,7 @@
                         <th scope="col"  width="5%">No.</th>
                         <th scope="col" >Date</th>
                         <th scope="col" >Member Code</th>
+                        <th scope="col" >Product</th>
                         <th scope="col" >Total Item</th>
                         <th scope="col" >Total Price</th>
                         <th scope="col" >Discount</th>
@@ -52,10 +53,30 @@
                 {data: 'DT_RowIndex', searchable: false, sortable: false},
                 {data: 'date'},
                 {data: 'code_member'},
+                // {data: 'name_product'},
+                {
+                    data:function(data){
+                        let items = "";
+                        let collections = data.detail;
+                        for (let i = 0; i < 2; i++) {
+                            let product = collections[i];
+                            if(product != undefined){
+                                if(collections.length >1  && i != 1 ){
+                                    items += product.products.name_product +",";
+                                }else{
+                                    items += product.products.name_product 
+                                }
+                                // console.log("undefined");
+                            }
+                            // console.log(product);
+                           
+                        }
+                        return items;
+                    }
+                },
                 {data: 'total_item'},
                 {data: 'total_price'},
                 {data: 'discount'},
-                // {data: 'tax'},
                 {data: 'pay'},
                 {data: 'cashier'},
                 {data: 'action', searchable: false, sortable: false},

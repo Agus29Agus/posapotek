@@ -49,7 +49,7 @@ class ProductController extends Controller
                 return money_format($product->stock);
             })
             ->addColumn('batch', function ($product) {
-                return money_format($product->batch);
+                return $product->batch;
             })
             ->addColumn('expired_date', function ($product) {
                 return indonesian_date($product->expired_date);
